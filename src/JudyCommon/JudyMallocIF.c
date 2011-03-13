@@ -55,7 +55,11 @@
 // Note:  To keep the MALLOC macro faster and simpler, set j__uMaxWords to
 // MAXINT, not zero, by default.
 
+#ifdef JU_WIN64
+Word_t j__uMaxWords = ~0ULL;
+#else
 Word_t j__uMaxWords = ~0UL;
+#endif // JU_WIN64
 
 // This macro hides the faking of a malloc failure:
 //
@@ -63,20 +67,34 @@ Word_t j__uMaxWords = ~0UL;
 // complexity of first adding WordsNow, meaning the trigger point is not
 // exactly where you might assume, but it shouldnt matter.
 
+#ifdef JU_WIN64
+#define MALLOC(MallocFunc,WordsPrev,WordsNow) \
+        (((WordsPrev) > j__uMaxWords) ? 0ULL : MallocFunc(WordsNow))
+#else
 #define MALLOC(MallocFunc,WordsPrev,WordsNow) \
         (((WordsPrev) > j__uMaxWords) ? 0UL : MallocFunc(WordsNow))
+#endif // JU_WIN64
 
 // Clear words starting at address:
 //
 // Note:  Only use this for objects that care; in other cases, it doesnt
 // matter if the objects memory is pre-zeroed.
 
+#ifdef JU_WIN64
+#define ZEROWORDS(Addr,Words)                   \
+        {                                       \
+            Word_t  Words__ = (Words);          \
+            PWord_t Addr__  = (PWord_t) (Addr); \
+            while (Words__--) *Addr__++ = 0ULL;  \
+        }
+#else
 #define ZEROWORDS(Addr,Words)                   \
         {                                       \
             Word_t  Words__ = (Words);          \
             PWord_t Addr__  = (PWord_t) (Addr); \
             while (Words__--) *Addr__++ = 0UL;  \
         }
+#endif // JU_WIN64
 
 #ifdef TRACEMI
 

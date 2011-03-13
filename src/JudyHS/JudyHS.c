@@ -147,6 +147,12 @@ main()
 
 #define WORDSIZE     (sizeof(Word_t))
 
+#ifdef JU_WIN64
+#define ZEROUL		0ULL
+#else
+#define ZEROUL		0UL
+#endif // JU_WIN64
+
 // this is the struct used for "leaf" strings.  Note that
 // the Value is followed by a "variable" length ls_String array.
 //
@@ -190,7 +196,7 @@ typedef struct L_EAFSTRING
 //
 #define        COPYSTRING8toWORD(WORD,STR,LEN)          \
 {                                                       \
-    WORD = 0UL;                                         \
+    WORD = ZEROUL;                                      \
     switch(LEN)                                         \
     {                                                   \
     default:    /* eight and greater */                 \
@@ -465,7 +471,7 @@ JudyHSIns(PPvoid_t PPArray,             // ^ to JudyHashArray name
 
 //  string can only be NULL if Len is 0.
 
-    if ((String == (uint8_t *) NULL) && (Len != 0UL))
+    if ((String == (uint8_t *) NULL) && (Len != ZEROUL))
     {
         JU_SET_ERRNO(PJError, JU_ERRNO_NULLPINDEX);
         return (PPJERR);

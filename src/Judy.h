@@ -30,7 +30,10 @@
 // and some tools on some platforms.
 
 #ifdef _MSC_VER
+
+#ifndef JU_WIN
 #define JU_WIN
+#endif
 
 #ifdef _WIN64
 #define JU_64BIT
@@ -215,9 +218,15 @@ typedef struct J_UDY_ERROR_STRUCT
 // (~0UL), to avoid a compiler "overflow in implicit constant conversion"
 // warning.
 
-#define   JERR (-1)                     /* functions returning int or Word_t */
-#define  PJERR ((Pvoid_t)  (~0UL))      /* mainly for use here, see below    */
-#define PPJERR ((PPvoid_t) (~0UL))      /* functions that return PPvoid_t    */
+#ifdef JU_WIN64
+#define   JERR (-1LL)                    /* functions returning int or Word_t */
+#define  PJERR ((Pvoid_t)  (~0ULL))      /* mainly for use here, see below    */
+#define PPJERR ((PPvoid_t) (~0ULL))      /* functions that return PPvoid_t    */
+#else
+#define   JERR (-1)                      /* functions returning int or Word_t */
+#define  PJERR ((Pvoid_t)  (~0UL))       /* mainly for use here, see below    */
+#define PPJERR ((PPvoid_t) (~0UL))       /* functions that return PPvoid_t    */
+#endif // JU_WIN64
 
 // Convenience macro for when detailed error information (PJError_t) is not
 // desired by the caller; a purposely short name:

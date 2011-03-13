@@ -231,6 +231,12 @@ typedef int bool_t;
 #define TRACEMF  1      // malloc calls at a lower level in JudyMalloc.c.
 #endif
 
+#ifdef JU_WIN64
+#define ONEUL		1ULL
+#else
+#define ONEUL		1UL
+#endif
+
 
 // SUPPORT FOR DEBUG-ONLY CODE:
 //
@@ -307,7 +313,11 @@ typedef int bool_t;
 
 // A word that is all-ones, normally equal to -1UL, but safer with ~0:
 
+#ifdef JU_WIN64
+#define cJU_ALLONES  (~0ULL)
+#else
 #define cJU_ALLONES  (~0UL)
+#endif // JU_WIN64
 
 // Note, these are forward references, but thats OK:
 
@@ -410,8 +420,13 @@ typedef PWord_t Pjv_t;   // pointer to JudyL value area.
 // constant; otherwise it is a variable shift, which is expensive on some
 // processors.
 
+#ifdef JU_WIN64
+#define JU_LEASTBYTESMASK(BYTES) \
+        ((0x100ULL << (cJU_BITSPERBYTE * ((BYTES) - 1))) - 1)
+#else
 #define JU_LEASTBYTESMASK(BYTES) \
         ((0x100UL << (cJU_BITSPERBYTE * ((BYTES) - 1))) - 1)
+#endif // JU_WIN64
 
 #define JU_LEASTBYTES(INDEX,BYTES)  ((INDEX) & JU_LEASTBYTESMASK(BYTES))
 
@@ -540,7 +555,7 @@ extern const uint8_t j__L_BranchBJPPopToWords[];
     Word_t   m_id;                                              \
     Word_t   h_igh  = POP1;                                     \
                                                                 \
-    while ((h_igh - l_ow) > 1UL)                                \
+    while ((h_igh - l_ow) > ONEUL)                              \
     {                                                           \
         m_id = (h_igh + l_ow) / 2;                              \
         if (P_leaf[m_id] > I_ndex)                              \
@@ -563,7 +578,7 @@ extern const uint8_t j__L_BranchBJPPopToWords[];
                                                                 \
     I_ndex = JU_LEASTBYTES((INDEX), (LFBTS));                   \
                                                                 \
-    while ((h_igh - l_ow) > 1UL)                                \
+    while ((h_igh - l_ow) > ONEUL)                              \
     {                                                           \
         m_id = (h_igh + l_ow) / 2;                              \
         COPYINDEX(i_ndex, &P_leaf[m_id * (LFBTS)]);             \
@@ -801,8 +816,13 @@ static inline BITMAPL_t j__udyCountBitsL(BITMAPL_t word)
 //
 // TBD:  Perhaps use an array[32] of masks instead of calculating them.
 
+#ifdef JU_WIN64
+#define JU_BITPOSMASKB(BITNUM) (1LL << ((BITNUM) % cJU_BITSPERSUBEXPB))
+#define JU_BITPOSMASKL(BITNUM) (1LL << ((BITNUM) % cJU_BITSPERSUBEXPL))
+#else
 #define JU_BITPOSMASKB(BITNUM) (1L << ((BITNUM) % cJU_BITSPERSUBEXPB))
 #define JU_BITPOSMASKL(BITNUM) (1L << ((BITNUM) % cJU_BITSPERSUBEXPL))
+#endif JU_WIN64
 
 
 // TEST/SET/CLEAR A BIT IN A BITMAP LEAF:

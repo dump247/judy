@@ -1045,7 +1045,11 @@ BranchBNextSubexp:	// return here to check next bitmap subexpanse.
 	    {
 		BRANCHB_STARTSUBEXP(SETLEASTDIGITS_D);
 		Pjp += SEARCHBITMAPMAXB(JU_JBB_BITMAP(Pjbb, subexp)) + 1;
+#ifdef JU_WIN64
+		bitposmaskB = (1ULL << (cJU_BITSPERSUBEXPB - 1));
+#else
 		bitposmaskB = (1U << (cJU_BITSPERSUBEXPB - 1));
+#endif // JU_WIN64
 		goto BranchBNextSubexp;
 	    }
 
@@ -1238,7 +1242,12 @@ LeafB1NextSubexp:	// return here to check next bitmap subexpanse.
 	    if (subexp-- > 0)		// more subexpanses.
 	    {
 		LEAFB1_STARTSUBEXP(SETLEASTDIGITS_D);
+		
+#ifdef JU_WIN64
+		bitposmaskL = (1ULL << (cJU_BITSPERSUBEXPL - 1));
+#else
 		bitposmaskL = (1UL << (cJU_BITSPERSUBEXPL - 1));
+#endif // JU_WIN64
 		goto LeafB1NextSubexp;
 	    }
 

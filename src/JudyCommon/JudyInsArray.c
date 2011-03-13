@@ -849,7 +849,11 @@ BuildBranch2:   // come here directly for Level = levelsub = cJU_ROOTSTATE.
         Pjp               = Pjbu->jbu_jp;           // for convenience in loop.
         numJPs            = 0;                      // non-null in the BranchU.
         digitmask         = cJU_MASKATSTATE(levelsub);   // see above.
-        digitshincr       = 1UL << (cJU_BITSPERBYTE * (levelsub - 1));
+#ifdef JU_WIN64
+        digitshincr       = 1ULL << (cJU_BITSPERBYTE * (levelsub - 1));
+#else
+		digitshincr       = 1UL << (cJU_BITSPERBYTE * (levelsub - 1));
+#endif // JU_WIN64
         retval            = TRUE;
 
 // Scan and populate JPs (subexpanses):

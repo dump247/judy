@@ -1,0 +1,6 @@
+*.lib
+*.dll
+*.obj
+
+src/Judy1/
+src/JudyL/

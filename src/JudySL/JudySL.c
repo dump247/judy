@@ -836,7 +836,11 @@ JudySLPrevSub(Pcvoid_t PArray, uint8_t * Index, int orig,
             return (&PSCLVALUE(PArray));
         }
 
+#ifdef JU_WIN64
+        indexword = ~0ULL;
+#else
         indexword = ~0UL;
+#endif // JU_WIN64
         if ((PPValue = JudyLLast(PArray, &indexword, PJError)) == PPJERR)
         {
             JudySLModifyErrno(PJError, PArray, orig ? PArray : (Pvoid_t)NULL);
