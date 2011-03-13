@@ -29,6 +29,14 @@
 // avoids "()" on macro names in comments for compatibility with older cc -Aa
 // and some tools on some platforms.
 
+#ifdef _MSC_VER
+#define JU_WIN
+
+#ifdef _WIN64
+#define JU_64BIT
+#endif // _WIN64
+
+#endif // _MSC_VER
 
 // PLATFORM-SPECIFIC
 
