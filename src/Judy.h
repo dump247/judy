@@ -34,6 +34,7 @@
 
 #ifdef _WIN64
 #define JU_64BIT
+#define JU_WIN64
 #endif // _WIN64
 
 #endif // _MSC_VER
@@ -100,11 +101,11 @@ typedef void ** PPvoid_t;
 #ifndef _WORD_T
 #define _WORD_T
 
-#ifdef JU_64BIT
+#ifdef JU_WIN64
 typedef unsigned long long    Word_t, * PWord_t;  // expect 32-bit or 64-bit words.
 #else
 typedef unsigned long         Word_t, * PWord_t;  // expect 32-bit or 64-bit words.
-#endif // JU_64BIT
+#endif // JU_WIN64
 
 #endif
 
